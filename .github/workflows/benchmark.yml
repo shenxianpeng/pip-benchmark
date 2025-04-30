@@ -1,0 +1,23 @@
+name: Benchmark
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.13
+      - name: Run benchmark
+        run: |
+          pip install nox
+          nox
