@@ -27,12 +27,11 @@ jobs:
         run: |
           pip install nox
           nox
-          python3 generate_html.py
-      - name: Upload benchmark HTML
+      - name: Upload benchmark json
         uses: actions/upload-artifact@v4
         with:
-          name: benchmark-html-${{ strategy.job-index }}
-          path: .benchmarks/html
+          name: benchmark-json-${{ strategy.job-index }}
+          path: .benchmarks
 
   publish:
     needs: benchmark
@@ -42,11 +41,12 @@ jobs:
       - name: Download benchmark HTML
         uses: actions/download-artifact@v4
         with:
-          pattern: benchmark-html-*
-          path: html
-          merge-multiple: true
+          pattern: benchmark-json-*
+          path: .benchmarks/
+      - name: Generate HTML
+        run:  python3 generate_html.py
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: html
+          publish_dir: .benchmarks/html
