@@ -42,7 +42,7 @@ jobs:
       - name: Download benchmark HTML
         uses: actions/download-artifact@v4
         with:
-          name: benchmark-html-*
+          pattern: benchmark-html-*
           path: html
           merge-multiple: true
       - name: Deploy to GitHub Pages
