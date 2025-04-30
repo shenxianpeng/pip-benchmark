@@ -27,16 +27,28 @@ jobs:
         run: |
           pip install nox
           nox
+      - name: Generate HTML
+        if: "${{ matrix.python-version == '3.13' }}"
+        run: python3 generate_html.py
+      - name: Upload benchmark HTML
+        if: "${{ matrix.python-version == '3.13' }}"
+        uses: actions/upload-artifact@v3
+        with:
+          name: benchmark-html
+          path: .benchmarks/html
 
   publish:
     needs: benchmark
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Generate HTML
-        run: python3 generate_html.py
+      - name: Download benchmark HTML
+        uses: actions/download-artifact@v3
+        with:
+          name: benchmark-html
+          path: html
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .benchmarks/html
+          publish_dir: html
