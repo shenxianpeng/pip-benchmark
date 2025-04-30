@@ -43,6 +43,7 @@ jobs:
         with:
           pattern: benchmark-json-*
           path: .benchmarks
+          merge-multiple: true
       - name: Generate HTML
         run:  python3 generate_html.py
       - name: Deploy to GitHub Pages
